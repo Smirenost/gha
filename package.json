@@ -1,0 +1,39 @@
+{
+  "name": "gha",
+  "version": "1.0.0",
+  "description": "Test Github Actions locally through Docker.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "preferGlobal": true,
+  "bin": {
+    "gha": "index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tschoffelen/gha.git"
+  },
+  "keywords": [
+    "github-actions",
+    "github",
+    "actions",
+    "docker",
+    "hcl",
+    "testing",
+    "debugging"
+  ],
+  "author": "Thomas Schoffelen <thomas@includable.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tschoffelen/gha/issues"
+  },
+  "homepage": "https://github.com/tschoffelen/gha#readme",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "commander": "^2.19.0",
+    "glob": "^7.1.3",
+    "hcl": "^0.1.0",
+    "shelljs": "^0.8.3"
+  }
+}

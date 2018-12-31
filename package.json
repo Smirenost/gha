@@ -1,7 +1,7 @@
 {
   "name": "gha",
   "version": "1.0.0",
-  "description": "Test Github Actions locally through Docker.",
+  "description": "Test your GitHub Actions workflow locally.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"

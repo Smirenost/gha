@@ -14,6 +14,7 @@ const {
 
 program
   .version('1.0.0')
+  .option('-v, --verbose', 'Verbose output')
   .option('-f <workflowfile>', 'Set workflow file path, defaults to .github/main.workflow')
   .option('-e <event>', 'Set event, defaults to push')
   .parse(process.argv)
@@ -22,6 +23,7 @@ checkDocker()
 
 const content = hcl.parse(fs.readFileSync(program.workflowfile || '.github/main.workflow', 'utf8'))
 const event = program.event || 'push'
+const verbose = program.verbose || false
 
 const actions = cleanupHcl(content.action)
 const workflows = cleanupHcl(content.workflow)
@@ -37,7 +39,7 @@ for (const workflowTitle in workflows) {
     workflow.resolves
       .forEach((action) => {
         buildDependencies(action, actions)
-          .forEach((action) => runAction(action, actions, event))
+          .forEach((action) => runAction(action, actions, event, verbose))
       })
   }
 }

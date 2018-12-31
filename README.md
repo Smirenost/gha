@@ -18,7 +18,6 @@ Other prerequisites:
 * A repo with a `.github/main.workflow` file
 
 
-
 ## Usage
 
 ```
@@ -31,10 +30,20 @@ Options:
   -h, --help         output usage information
 ```
 
+### Passing secrets
+
+You can set the value of [secrets](https://developer.github.com/actions/creating-workflows/storing-secrets/) defined in your workflow by passing them as environment variables, e.g.:
+
+```sh
+MY_SECRET_TOKEN=yo-mamma gha
+```
+
 
 ## Development
 
-This app currently only supports Github-hosted Dockerfiles (i.e. with the
+There are still some things to do to achieve full functional parity.
+
+This app currently only supports GitGub-hosted Dockerfiles (i.e. with the
 `{user}/{repo}@{ref}` or `{user}/{repo}/{path}@{ref}` syntax), so we still need
 to add:
 
@@ -44,5 +53,4 @@ to add:
 
 Some improvements are also possible in other areas:
 
-- [ ] Add support for [secrets](https://developer.github.com/actions/creating-workflows/storing-secrets/)
 - [ ] Add support for default [`GITHUB_TOKEN`](https://developer.github.com/actions/creating-workflows/storing-secrets/#github-token-secret) env var

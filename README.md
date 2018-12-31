@@ -46,5 +46,3 @@ Some improvements are also possible in other areas:
 
 - [ ] Add support for [secrets](https://developer.github.com/actions/creating-workflows/storing-secrets/)
 - [ ] Add support for default [`GITHUB_TOKEN`](https://developer.github.com/actions/creating-workflows/storing-secrets/#github-token-secret) env var
-- [ ] Add [`/github/home`](https://developer.github.com/actions/creating-github-actions/accessing-the-runtime-environment/#filesystem) volume that should exist by default
-- [ ] Add file [`/github/workflow/event.json`](https://developer.github.com/actions/creating-github-actions/accessing-the-runtime-environment/#filesystem) that should exist by default

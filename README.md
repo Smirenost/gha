@@ -51,7 +51,7 @@ will work when actually running them on GitHub, there are a few small difference
 
 There are still some things to do to achieve full functional parity.
 
-This app currently only supports GitGub-hosted Dockerfiles (i.e. with the
+This app currently only supports GitHub-hosted Dockerfiles (i.e. with the
 `{user}/{repo}@{ref}` or `{user}/{repo}/{path}@{ref}` syntax), so we still need
 to add:
 

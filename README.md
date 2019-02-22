@@ -1,5 +1,7 @@
 # GitHub Actions Tester
 
+![npm](https://img.shields.io/npm/v/gha.svg)
+
 This Node application exposes an executable that allows you to test
 your GitHub workflow locally using Docker.
 

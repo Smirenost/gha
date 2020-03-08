@@ -1,45 +1,70 @@
 #! /usr/bin/env node
 
 const fs = require('fs')
+const path = require('path')
 const program = require('commander')
-const hcl = require('hcl')
 const chalk = require('chalk')
+const yaml = require('yaml')
 
 const {
-  cleanupHcl,
-  buildDependencies,
   runAction,
-  checkDocker
+  checkDocker,
+  err
 } = require('./lib/utils')
 
 program
-  .version('1.0.0')
+  .version('1.2.0')
   .option('-v, --verbose', 'Verbose output')
-  .option('-f <workflowfile>', 'Set workflow file path, defaults to .github/main.workflow')
-  .option('-e <event>', 'Set event, defaults to push')
+  .option('-f <workflowfile>', 'Set workflow file path, defaults to first Yaml file in `.github/workflows`')
+  .option('-e <event>', 'Set event, defaults to: push')
   .parse(process.argv)
 
+// First check if Docker is installed & running
 checkDocker()
 
-const content = hcl.parse(fs.readFileSync(program.workflowfile || '.github/main.workflow', 'utf8'))
+// Find file
+let fileName = program.workflowfile
+if (!fileName) {
+  try {
+    const filesInDir = fs.readdirSync(path.join('.github', 'workflows'))
+    if (!filesInDir.length) {
+      err('No workflow files found in .github/workflows')
+    }
+    fileName = path.join('.github', 'workflows', filesInDir[0])
+  } catch (e) {
+    err('No .github/workflows directory found')
+  }
+}
+
+// Parse YAML
+const content = yaml.parse(fs.readFileSync(fileName, 'utf8'))
 const event = program.event || 'push'
 const verbose = program.verbose || false
 
-const actions = cleanupHcl(content.action)
-const workflows = cleanupHcl(content.workflow)
+// TODO: we should actually walk through the `on` object and determine what jobs to run
 
-for (const workflowTitle in workflows) {
-  if (!workflows.hasOwnProperty(workflowTitle)) {
+// if ('on' in workflow && workflow.on && workflow.on === event) {
+//   workflow.resolves
+//     .forEach((action) => {
+//       buildDependencies(action, actions)
+//         .forEach((action) => runAction(action, actions, event, verbose))
+//     })
+// }
+
+// Run all the jobs
+for (const jobName in content.jobs) {
+  if (!content.jobs.hasOwnProperty(jobName)) {
     continue
   }
 
-  const workflow = workflows[workflowTitle]
-  if ('on' in workflow && workflow.on && workflow.on === event) {
-    console.log(chalk.bold(`Running ${workflowTitle}...\n`))
-    workflow.resolves
-      .forEach((action) => {
-        buildDependencies(action, actions)
-          .forEach((action) => runAction(action, actions, event, verbose))
-      })
+  console.log(chalk.bold(`Running job ${jobName}...\n`))
+  const job = content.jobs[jobName]
+  if (!job.steps) {
+    console.log('Job has no steps, skipping')
+  }
+
+  for (const step of job.steps) {
+    const name = step.name || step.uses.split('@')[0].replace('actions/', '')
+    runAction({ name, step, event, verbose })
   }
 }
